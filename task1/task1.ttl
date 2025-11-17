@@ -1,0 +1,52 @@
+@prefix ex: <http://example.org/TaskOne#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Классы
+ex:Car rdf:type rdfs:Class .
+ex:Manufacturer rdf:type rdfs:Class .
+ex:Person rdf:type rdfs:Class .
+
+# Свойства
+ex:madeBy rdf:type rdf:Property ;
+          rdfs:domain ex:Car ;
+          rdfs:range ex:Manufacturer .
+
+ex:ownedBy rdf:type rdf:Property ;
+           rdfs:domain ex:Car ;
+           rdfs:range ex:Person .
+
+ex:modelName rdf:type rdf:Property ;
+             rdfs:domain ex:Car ;
+             rdfs:range xsd:string .
+
+ex:birthDate rdf:type rdf:Property ;
+             rdfs:domain ex:Person ;
+             rdfs:range xsd:date .
+
+ex:productionYear rdf:type rdf:Property ;
+                  rdfs:domain ex:Car ;
+                  rdfs:range xsd:gYear .
+
+# Сущности
+ex:Toyota rdf:type ex:Manufacturer .
+ex:Ford rdf:type ex:Manufacturer .
+
+ex:John rdf:type ex:Person ;
+        ex:birthDate "1985-03-20"^^xsd:date .
+
+ex:Mary rdf:type ex:Person ;
+        ex:birthDate "1990-07-12"^^xsd:date .
+
+ex:Camry2020 rdf:type ex:Car ;
+             ex:modelName "Camry" ;
+             ex:productionYear "2020"^^xsd:gYear ;
+             ex:madeBy ex:Toyota ;
+             ex:ownedBy ex:John .
+
+ex:Mustang2018 rdf:type ex:Car ;
+               ex:modelName "Mustang" ;
+               ex:productionYear "2018"^^xsd:gYear ;
+               ex:madeBy ex:Ford ;
+               ex:ownedBy ex:Mary .
