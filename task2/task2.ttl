@@ -1,0 +1,39 @@
+@prefix ex: <http://example.org/TaskTwo#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# Класс
+ex:Person rdf:type owl:Class .
+
+# Свойства
+ex:hasParent rdf:type owl:ObjectProperty ;
+             rdfs:domain ex:Person ;
+             rdfs:range ex:Person ;
+             rdf:type owl:FunctionalProperty, owl:IrreflexiveProperty .
+
+ex:hasChild rdf:type owl:ObjectProperty ;
+            rdfs:domain ex:Person ;
+            rdfs:range ex:Person ;
+            owl:inverseOf ex:hasParent .
+
+ex:hasAncestor rdf:type owl:ObjectProperty ;
+               rdfs:domain ex:Person ;
+               rdfs:range ex:Person ;
+               rdf:type owl:TransitiveProperty ;
+               owl:propertyChainAxiom ( ex:hasParent ) .
+
+ex:hasDescendant rdf:type owl:ObjectProperty ;
+                 rdfs:domain ex:Person ;
+                 rdfs:range ex:Person ;
+                 rdf:type owl:TransitiveProperty ;
+                 owl:propertyChainAxiom ( ex:hasChild ) .
+
+# Примеры индивидов
+ex:John rdf:type ex:Person ;
+        ex:hasParent ex:Mary .
+
+ex:Mary rdf:type ex:Person ;
+        ex:hasParent ex:Alice .
+
+ex:Alice rdf:type ex:Person .
