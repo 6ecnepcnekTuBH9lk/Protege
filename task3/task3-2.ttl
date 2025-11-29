@@ -1,0 +1,301 @@
+@prefix : <http://example.org/retail#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@base <http://example.org/retail#> .
+
+<http://example.org/retail#> rdf:type owl:Ontology ;
+                              rdfs:comment "Онтология для розничной торговли одеждой с исправленным SWRL правилом для ClearanceCandidate." .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled
+<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#argument1
+swrl:argument1 rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#argument2
+swrl:argument2 rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#arguments
+swrl:arguments rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#body
+swrl:body rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#builtin
+swrl:builtin rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#classPredicate
+swrl:classPredicate rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#head
+swrl:head rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2003/11/swrl#propertyPredicate
+swrl:propertyPredicate rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/retail#seasonSuitable
+:seasonSuitable rdf:type owl:ObjectProperty ;
+                rdfs:domain :Product ;
+                rdfs:range :Season .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://example.org/retail#hasStock
+:hasStock rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Product ;
+          rdfs:range xsd:integer .
+
+
+###  http://example.org/retail#monthlySales
+:monthlySales rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Product ;
+              rdfs:range xsd:integer .
+
+
+###  http://example.org/retail#seasonCode
+:seasonCode rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Season ;
+            rdfs:range xsd:integer .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://example.org/retail#ClearanceCandidate
+:ClearanceCandidate rdf:type owl:Class ;
+                    rdfs:subClassOf :Product ;
+                    rdfs:comment "Товары, помеченные как кандидаты для распродажи/clearance." .
+
+
+###  http://example.org/retail#Product
+:Product rdf:type owl:Class .
+
+
+###  http://example.org/retail#Season
+:Season rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://example.org/retail#NowSeason
+:NowSeason rdf:type owl:NamedIndividual ,
+                    :Season ;
+           :seasonCode 1 .
+
+
+###  http://example.org/retail#Summer
+:Summer rdf:type owl:NamedIndividual ,
+                 :Season ;
+        :seasonCode 1 .
+
+
+###  http://example.org/retail#Winter
+:Winter rdf:type owl:NamedIndividual ,
+                 :Season ;
+        :seasonCode 2 .
+
+
+###  http://example.org/retail#prod123
+:prod123 rdf:type owl:NamedIndividual ,
+                  :ClearanceCandidate ,
+                  :Product ;
+         :seasonSuitable :Winter ;
+         :hasStock 120 ;
+         :monthlySales 5 ;
+         rdfs:label "Wool Coat - SKU 123" .
+
+
+###  http://example.org/retail#prod456
+:prod456 rdf:type owl:NamedIndividual ,
+                  :Product ;
+         :seasonSuitable :Winter ;
+         :hasStock 10 ;
+         :monthlySales 15 ;
+         rdfs:label "Winter Hat - SKU 456" .
+
+
+[ swrl:arguments [ ] ;
+swrl:builtin swrlb:greaterThan
+] .
+
+[ swrl:argument1 :p ;
+   swrl:classPredicate :ClearanceCandidate
+ ] .
+
+[ swrl:arguments [ ] ;
+swrl:builtin swrlb:lessThan
+] .
+
+[ swrl:argument1 :p ;
+   swrl:argument2 :season ;
+   swrl:propertyPredicate :seasonSuitable
+ ] .
+
+[ swrl:argument1 :season ;
+   swrl:argument2 :scode ;
+   swrl:propertyPredicate :seasonCode
+ ] .
+
+[ swrl:arguments [ ] ;
+swrl:builtin swrlb:notEqual
+] .
+
+[ swrl:argument1 :p ;
+   swrl:argument2 :sales ;
+   swrl:propertyPredicate :monthlySales
+ ] .
+
+[ swrl:argument1 :NowSeason ;
+   swrl:argument2 :nscode ;
+   swrl:propertyPredicate :seasonCode
+ ] .
+
+[ swrl:argument1 :p ;
+   swrl:argument2 :stock ;
+   swrl:propertyPredicate :hasStock
+ ] .
+
+[ swrl:argument1 :p ;
+   swrl:classPredicate :Product
+ ] .
+
+#################################################################
+#    Annotations
+#################################################################
+
+:ClearanceRule swrl:body [ ] ;
+swrl:head [ ] .
+
+
+#################################################################
+#    Rules
+#################################################################
+
+:p rdf:type swrl:Variable .
+
+:stock rdf:type swrl:Variable .
+
+:sales rdf:type swrl:Variable .
+
+:season rdf:type swrl:Variable .
+
+:scode rdf:type swrl:Variable .
+
+:nscode rdf:type swrl:Variable .
+
+[ <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean ;
+   rdfs:comment "Если у продукта большой запас (>50), низкие продажи (<10/мес) и сезон != NowSeason, то ClearanceCandidate." ;
+   rdfs:label "S1" ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate :Product ;
+                           swrl:argument1 :p
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                      swrl:propertyPredicate :hasStock ;
+                                      swrl:argument1 :p ;
+                                      swrl:argument2 :stock
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                 swrl:propertyPredicate :monthlySales ;
+                                                 swrl:argument1 :p ;
+                                                 swrl:argument2 :sales
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate :seasonSuitable ;
+                                                            swrl:argument1 :p ;
+                                                            swrl:argument2 :season
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                       swrl:propertyPredicate :seasonCode ;
+                                                                       swrl:argument1 :season ;
+                                                                       swrl:argument2 :scode
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                  swrl:propertyPredicate :seasonCode ;
+                                                                                  swrl:argument1 :NowSeason ;
+                                                                                  swrl:argument2 :nscode
+                                                                                ] ;
+                                                                      rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                 rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                                                                             swrl:builtin swrlb:greaterThan ;
+                                                                                             swrl:arguments [ rdf:type rdf:List ;
+                                                                                                              rdf:first :stock ;
+                                                                                                              rdf:rest [ rdf:type rdf:List ;
+                                                                                                                         rdf:first 50 ;
+                                                                                                                         rdf:rest rdf:nil
+                                                                                                                       ]
+                                                                                                            ]
+                                                                                           ] ;
+                                                                                 rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                            rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                                                                                        swrl:builtin swrlb:lessThan ;
+                                                                                                        swrl:arguments [ rdf:type rdf:List ;
+                                                                                                                         rdf:first :sales ;
+                                                                                                                         rdf:rest [ rdf:type rdf:List ;
+                                                                                                                                    rdf:first 10 ;
+                                                                                                                                    rdf:rest rdf:nil
+                                                                                                                                  ]
+                                                                                                                       ]
+                                                                                                      ] ;
+                                                                                            rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                                       rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                                                                                                   swrl:builtin swrlb:notEqual ;
+                                                                                                                   swrl:arguments ( :scode
+                                                                                                                                    :nscode
+                                                                                                                                  )
+                                                                                                                 ] ;
+                                                                                                       rdf:rest rdf:nil
+                                                                                                     ]
+                                                                                          ]
+                                                                               ]
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate :ClearanceCandidate ;
+                           swrl:argument1 :p
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
